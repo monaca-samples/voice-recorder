@@ -1,0 +1,91 @@
+<template>
+  <div class="page" data-name="catalog">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="title">Voice Recorder</div>
+      </div>
+    </div>
+    <div class="page-content">
+      <!-- Display buttons based on recording status -->
+      ${ status == 'ready' ?
+        $h`<button class="button button-large button-fill" @click=${start}>Start Recording</button>` :
+        $h`<button class="button button-large button-fill" @click=${stop}>Stop Recording</button>`
+      }
+      <p>
+        ${ playable &&
+            $h`
+                <div class="block-title">Recorded Audio</div> 
+                <button class="button button-large button-fill" @click=${listen}>Play</button>
+            `
+        }
+      </p>
+    </div>
+  </div>
+</template>
+<script>
+  export default (props, { $update }) => {
+    // Object for recording
+    let recorder;
+    let audioData = [];
+    // Recording status
+    let status = 'ready';
+    // Play button status
+    let playable = false;
+
+    // Start recording
+    const start = async (e) => {
+      e.preventDefault();
+      // Initialize audioData array
+      audioData = [];
+      // Create audio input stream
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Create MediaRecorder
+      recorder = new MediaRecorder(stream);
+      // Event listener for when data is available
+      recorder.addEventListener('dataavailable', _dataavailable);
+      // Start recording
+      recorder.start();
+      // Update status for UI
+      status = 'recording';
+      // Update UI
+      $update();
+    };
+
+    const _dataavailable = (e) => {
+      // Push the available data to audioData array
+      audioData.push(e.data);
+    }
+
+    // Stop recording
+    const stop = (e) => {
+      e.preventDefault();
+      // Stop recording
+      recorder.stop();
+      // Reset status
+      status = 'ready';
+      playable = true;
+      $update();
+    }
+
+    // Play recorded audio
+    const listen = async () => {
+      // Convert Blob to ArrayBuffer
+      const audioBlob = new Blob(audioData);
+      const arrayBuffer = await audioBlob.arrayBuffer();
+      // Create Web Audio API context
+      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+      const context = new AudioContext();
+      // Convert ArrayBuffer to AudioBuffer
+      const audioBuffer = await (new Promise((res, rej) => {
+        context.decodeAudioData(arrayBuffer, res, rej);
+      }));
+      // Create audio source and play
+      const source = context.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(context.destination);
+      source.start(0);
+    }
+    return $render;
+  }
+</script>
