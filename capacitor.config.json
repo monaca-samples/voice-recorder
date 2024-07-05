@@ -1,0 +1,42 @@
+{
+    "appId": "com.example.framework7",
+    "appName": "Alvaro-san App",
+    "webDir": "www",
+    "server": {
+        "iosScheme": "monaca-app",
+        "hostname": "localhost"
+    },
+    "cordova": {
+        "preferences": {
+            "loglevel": "DEBUG",
+            "AndroidLaunchMode": "singleTop",
+            "ErrorUrl": "",
+            "SplashScreen": "screen",
+            "AllowInlineMediaPlayback": "false",
+            "AutoHideSplashScreen": "true",
+            "BackupWebStorage": "cloud",
+            "EnableViewportScale": "false",
+            "FadeSplashScreen": "true",
+            "FadeSplashScreenDuration": "250",
+            "KeyboardDisplayRequiresUserAction": "true",
+            "ShowSplashScreenSpinner": "false",
+            "SuppressesIncrementalRendering": "false",
+            "TopActivityIndicator": "gray",
+            "GapBetweenPages": "0",
+            "PageLength": "0",
+            "PaginationBreakingMode": "page",
+            "PaginationMode": "unpaginated",
+            "UIWebViewDecelerationSpeed": "normal",
+            "target-device": "universal",
+            "MediaTypesRequiringUserActionForPlayback": "none",
+            "WindowsStorePublisherName": "My Name",
+            "WindowsStoreIdentityName": "68636b59-0b37-f865-aa0b-b1f95588e884",
+            "KeepRunning": "true",
+            "monaca:AndroidIsPackageNameSeparate": "false",
+            "DisallowOverscroll": "true",
+            "Orientation": "default",
+            "SplashScreenDelay": "1000",
+            "Fullscreen": "false"
+        }
+    }
+}

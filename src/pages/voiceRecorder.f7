@@ -1,0 +1,112 @@
+<template>
+  <div class="page" data-name="catalog">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="title">Voice Recorder</div>
+      </div>
+    </div>
+    <div class="page-content">
+      <!-- Display buttons based on recording status -->
+      ${ status == 'ready' ?
+        $h`<button class="button button-large button-fill" @click=${start}>Start Recording</button>` :
+        $h`<button class="button button-large button-fill" @click=${stop}>Stop Recording</button>`
+      }
+      <p>
+        ${ playable &&
+            $h`
+                <div class="block-title">Recorded Audio</div> 
+                <button class="button button-large button-fill" @click=${listen}>Play</button>
+            `
+        }
+      </p>
+    </div>
+  </div>
+</template>
+<script>
+  export default (props, { $update }) => {
+  let recorder;
+  let audioData = [];
+  let status = 'ready';
+  let playable = false;
+  let mediaRec; // cordova-plugin-media recorder
+
+  document.addEventListener('deviceready', onDeviceReady, false);
+
+  function onDeviceReady() {
+      // Cordova is now fully loaded. Now you can safely use Cordova plugins.
+      console.log("Cordova is ready, and the Media plugin can be used.");
+  }
+
+  // Determine if running on Android or iOS using Cordova's device plugin
+  //const isCordovaPlatform = () => ['Android', 'iOS'].includes(device.platform);
+
+  // Start recording
+  const start = async (e) => {
+    e.preventDefault();
+    //if (isCordovaPlatform()) {
+      // cordova-plugin-media for recording
+      const src = "myRecording.wav"; // File name to store the recording
+      mediaRec = new Media(src,
+        () => console.log("Record Success"),
+        (err) => console.error("Record Error:", err)
+      );
+      mediaRec.startRecord();
+    /*} else {
+      // Fallback to Web API for other platforms
+      audioData = [];
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      recorder = new MediaRecorder(stream);
+      recorder.addEventListener('dataavailable', _dataavailable);
+      recorder.start();
+    }*/
+    status = 'recording';
+    $update();
+  };
+
+  const _dataavailable = (e) => {
+    audioData.push(e.data);
+  }
+
+  // Stop recording
+  const stop = (e) => {
+    e.preventDefault();
+    //if (isCordovaPlatform() && mediaRec) {
+      mediaRec.stopRecord();
+    //} else {
+    //  recorder.stop();
+    //}
+    status = 'ready';
+    playable = true;
+    $update();
+  }
+
+  // Play recorded audio
+  const listen = async () => {
+    //if (isCordovaPlatform() && mediaRec) {
+      // Use cordova-plugin-media for playback
+      const src = "myRecording.wav"; // Same file name used for recording
+      let mediaPlay = new Media(src,
+        () => console.log("Play Success"),
+        (err) => console.error("Play Error:", err)
+      );
+      mediaPlay.play();
+    /*} else {
+      // Fallback to Web API for other platforms
+      const audioBlob = new Blob(audioData);
+      const arrayBuffer = await audioBlob.arrayBuffer();
+      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+      const context = new AudioContext();
+      const audioBuffer = await (new Promise((res, rej) => {
+        context.decodeAudioData(arrayBuffer, res, rej);
+      }));
+      const source = context.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(context.destination);
+      source.start(0);
+    }*/
+  }
+
+  return $render;
+}
+</script>
