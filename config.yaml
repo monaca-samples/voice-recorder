@@ -24,3 +24,4 @@ platforms:
                 - UIInterfaceOrientationPortrait
                 - UIInterfaceOrientationLandscapeLeft
                 - UIInterfaceOrientationLandscapeRight
+            - NSMicrophoneUsageDescription: 'This app requires access to the microphone.'
