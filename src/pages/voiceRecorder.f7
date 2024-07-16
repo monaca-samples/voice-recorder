@@ -68,12 +68,7 @@
   // Play recorded audio
   const listen = async () => {
     // Use cordova-plugin-media for playback
-    const src = "myRecording.wav"; // Same file name used for recording
-    let mediaPlay = new Media(src,
-      () => console.log("Play Success"),
-      (err) => console.error("Play Error:", err)
-    );
-    mediaPlay.play();
+    mediaRec.play();
   }
 
   return $render;
