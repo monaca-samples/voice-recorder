@@ -7,19 +7,21 @@
       </div>
     </div>
     <div class="page-content">
-      <!-- Display buttons based on recording status -->
-      ${ status == 'ready' ?
-        $h`<button class="button button-large button-fill" @click=${start}>Start Recording</button>` :
-        $h`<button class="button button-large button-fill" @click=${stop}>Stop Recording</button>`
-      }
-      <p>
-        ${ playable &&
-            $h`
-                <div class="block-title">Recorded Audio</div> 
-                <button class="button button-large button-fill" @click=${listen}>Play</button>
-            `
-        }
-      </p>
+      <div class="block block-strong">
+          <!-- Display buttons based on recording status -->
+          ${ status == 'ready' ?
+            $h`<button class="button button-large button-fill" @click=${start}>Start Recording</button>` :
+            $h`<button class="button button-large button-fill" @click=${stop}>Stop Recording</button>`
+          }
+          ${ playable &&
+              $h`
+                <p>
+                  <div class="block-title">Recorded Audio</div> 
+                  <button class="button button-large button-fill" @click=${listen}>Play</button>
+                </p>
+              `
+          }
+      </div>
     </div>
   </div>
 </template>
@@ -51,10 +53,6 @@
     status = 'recording';
     $update();
   };
-
-  const _dataavailable = (e) => {
-    audioData.push(e.data);
-  }
 
   // Stop recording
   const stop = (e) => {

@@ -1,6 +1,6 @@
 {
     "appId": "com.example.framework7",
-    "appName": "Alvaro-san App",
+    "appName": "Voice Recorder App",
     "webDir": "www",
     "server": {
         "iosScheme": "monaca-app",
